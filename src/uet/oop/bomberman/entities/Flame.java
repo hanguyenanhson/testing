@@ -148,7 +148,7 @@ public class Flame extends Entity implements CollisionTypeCheck{
                 top = i + 1;
                 return;
             }
-            top = i  ;
+            top = i + 1;
         }
     }
 
@@ -159,7 +159,7 @@ public class Flame extends Entity implements CollisionTypeCheck{
                 down = i;
                 return;
             } else if(collisionType(ex_down) instanceof Brick ) {
-                down = i+ 1;
+                down = i + 1;
                 return;
             }
             down = i + 1;

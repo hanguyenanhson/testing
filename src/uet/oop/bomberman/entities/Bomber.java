@@ -1,19 +1,14 @@
 package uet.oop.bomberman.entities;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
+import uet.oop.bomberman.audio.Music;
 import uet.oop.bomberman.graphics.Sprite;
-import javax.swing.plaf.basic.BasicTreeUI;
+
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import static uet.oop.bomberman.entities.Music.DEAD;
-import static uet.oop.bomberman.entities.Music.PLACE_BOMB;
+import static uet.oop.bomberman.audio.Music.DEAD;
+import static uet.oop.bomberman.audio.Music.PLACE_BOMB;
 
 
 public class Bomber extends AnimatedEntity {
@@ -38,7 +33,7 @@ public class Bomber extends AnimatedEntity {
         setLayer(1);
         setSpeed(2);
         bombNum = 1;
-        setRadius(2);
+        setRadius(1);
     }
 
     public void setRadius(int radius) {

@@ -4,16 +4,15 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.Music;
+import uet.oop.bomberman.audio.Music;
 import uet.oop.bomberman.entities.enemies.Balloon;
 import uet.oop.bomberman.entities.enemies.Doll;
 import uet.oop.bomberman.entities.enemies.Enemy;
@@ -29,18 +28,19 @@ import java.io.FileReader;
 import java.util.List;
 import java.util.*;
 
-import static uet.oop.bomberman.entities.Music.BACKGROUND_MUSIC;
-import static uet.oop.bomberman.entities.Music.DEAD;
+import static uet.oop.bomberman.audio.Music.*;
 
 public class BombermanGame extends Application  {
     public static int WIDTH = 31;
-     public static Music music = new Music(Music.BACKGROUND_MUSIC);
-   // public Music music() {
-     //   return music;
-    //}
-    //public void setMusic(Music _music) {
-    //  music = _music;
-    //}
+    public static Music music = new Music(Music.BACKGROUND_MUSIC);
+    public static Music menuMusic = new Music(MENU_BACKGROUND);
+    public static Muted muted = new Muted();
+    public Music music() {
+        return music;
+    }
+    public void setMusic(Music _music) {
+        music = _music;
+    }
     public static int HEIGHT = 13;
     private int xStart = 0;
     private int yStart = 0;
@@ -59,90 +59,77 @@ public class BombermanGame extends Application  {
     public int startSpeed = 2;
     public int startFlame = 1;
     public static Bomber bomberman = new Bomber(1 , 1, Sprite.player_right.getFxImage());
+    public static LevelController lc = new LevelController();
+    public boolean finishedLevel = false;
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
 
     @Override
     public void start(Stage stage) {
-        // Tao Canvas
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-        gc = canvas.getGraphicsContext2D();
-
-        // Tao root container
-        Group root = new Group();
-        root.getChildren().add(canvas);
-        // Tao scene
-        Scene scene = new Scene(root);
-
-        //menu scene test
-        Scene menu;
-        Label label = new Label("Menu");
-        Button b1 = new Button("Start");
-        Button b2 = new Button("Exit");
-        b1.setOnAction(e -> {stage.setScene(scene);});
-        b2.setOnAction(e -> System.exit(0));
-        VBox layout1 = new VBox(20);
-        layout1.getChildren().addAll(label, b1, b2);
-        menu = new Scene(layout1, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-
-        // Them scene vao stage
-        stage.setTitle("Bomberman");
-        stage.setScene(menu);
-        stage.show();
+        Scene lvscene = createSceneLevel();
+        lc.setLvScene(lvscene);
         load(level);
 
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Menu.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Bomberman");
+            menuMusic.loop();
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        startGame(stage, lvscene);
+    }
+
+    public void startGame(Stage stage, Scene lvscene) {
         ArrayList<Bomb> bombs = bomberman.getBombs();
         entities.add(bomberman);
         AnimationTimer timer = new AnimationTimer() {
             public long prevTime = 0;
             @Override
             public void handle(long now) {
-            long dt = now - prevTime;
+                long dt = now - prevTime;
                 if (dt > 10000000) {
                     render();
                     update();
+                    if (muted.isMutedMusic()) {
+                        //music.stop();
+                    } else {
+                        //music.loop();
+                    }
+                    if (finishedLevel) {
+                        Scene lvscene = createSceneLevel();
+                        lc.setLvScene(lvscene);
+                        load(level);
+                        stage.setScene(lvscene);
+                        stage.show();
+                        finishedLevel = false;
+                    }
                     prevTime = now;
                 }
             }
         };
         timer.start();
-        scene.setOnKeyPressed(event -> {
+        lvscene.setOnKeyPressed(event -> {
             bomberman.handleKeyPressedEvent(event.getCode());
         });
-        scene.setOnKeyReleased(event -> bomberman.handleKeyReleasedEvent(event.getCode()));
-
+        lvscene.setOnKeyReleased(event -> bomberman.handleKeyReleasedEvent(event.getCode()));
     }
 
-    //tao map
-    //public void createMap() {
-        //for (int i = 0; i < WIDTH; i++) {
-           // for (int j = 0; j < HEIGHT; j++) {
-             //   Entity object;
-               // Entity brick = null;
-                //if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
-                  //  object = new Wall(i, j, Sprite.wall.getFxImage());
-                //} else {
-                  //  object = new Grass(i, j, Sprite.grass.getFxImage());
-                    //if (i % 2 == 0 && j % 2 == 0) {
-                      //  object = new Wall(i, j, Sprite.wall.getFxImage());
-                    //}
-                    //if (i == 9 && j == 9) {
-                      //  enemies.add(new Balloon(i, j, Sprite.balloom_left1.getFxImage()));
-                    //}
-                    //if (i == 5 && j == 5) {
-                      //  enemies.add(new Doll(i, j, Sprite.doll_left1.getFxImage()));
-                    //}
-                    //if (i == 7 && j == 7) {
-                      //  enemies.add(new Oneal(i, j, Sprite.oneal_left1.getFxImage()));
-                    //}
-                //}
-                //stillObjects.add(object);
-                //if (brick != null) stillObjects.add(brick);
-            //}
-        //}
-    //}
-
+    public Scene createSceneLevel() {
+        // Tao Canvas
+        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+        gc = canvas.getGraphicsContext2D();
+        // Tao level container
+        Group lv = new Group();
+        lv.getChildren().add(canvas);
+        // Tao scene
+        Scene scene = new Scene(lv);
+        return scene;
+    }
 
     public void load(int _level) {
         try {
@@ -186,7 +173,7 @@ public class BombermanGame extends Application  {
                         //map[i][j] = 0;
                     }
                     if (r.charAt(j) == '2') {
-//                      enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage(), myBomber));
+//                        enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage(), myBomber));
                         enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
                         //map[i][j] = 0;
                     }
@@ -286,9 +273,8 @@ public class BombermanGame extends Application  {
                     bomberman.stay();
                 } else if (stillObject instanceof Portal) {
                     if (enemies.size() == 0) {
-                        System.exit(0); //remove later
-                        //load(level++);
-                        //sound
+                        level++;
+                        finishedLevel = true;
                     }
                 }
             }
@@ -298,16 +284,19 @@ public class BombermanGame extends Application  {
             Rectangle item = stillObjects.get(i).getHitBox();
                 if(item.intersects(bomber)) {
                     if(stillObjects.get(i) instanceof  FlameItem) {
-                        bomberman.setRadius(5);
+                        new Music(POWER_UP).play();
+                        bomberman.setRadius(startFlame+=2);
                         stillObjects.remove(stillObjects.get(i));
                     }
                     if(stillObjects.get(i) instanceof BombItem) {
-                        bomberman.setBombNum(4);
+                        new Music(POWER_UP).play();
+                        bomberman.setBombNum(startBomb+=2);
                         stillObjects.remove(stillObjects.get(i));
 
                     }
                     if(stillObjects.get(i) instanceof  SpeedItem) {
-                        bomberman.setSpeed(5);
+                        new Music(POWER_UP).play();
+                        bomberman.setSpeed(startSpeed+=2);
                         stillObjects.remove(stillObjects.get(i));
                     }
                 }
@@ -329,6 +318,7 @@ public class BombermanGame extends Application  {
                             entities.remove(bomberman);
                             bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
                             entities.add(bomberman);
+                            new Music(DEAD).play();
                             count.cancel();
                         }
                     }, 500,1);
@@ -386,12 +376,12 @@ public class BombermanGame extends Application  {
                 Rectangle r2 = enemy.getHitBox();
                 if (r1.intersects(r2)) {
                     enemy.setAlive(false);
+                    new Music(ENEMY_DEAD).play();
                 }
             }
             //flame vs bomberman
             Rectangle r2 = bomberman.getHitBox();
             if (r1.intersects(r2)) {
-
                 bomberman.setAlive(false);
                 startBomb = 1;
                 startFlame = 1;

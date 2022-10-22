@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.oop.bomberman.MenuController">
+   <children>
+      <ImageView fx:id="myImageView" fitHeight="400.0" fitWidth="600.0" opacity="0.75" pickOnBounds="true" AnchorPane.leftAnchor="0.0">
+         <image>
+            <Image url="@../menuScene1.png" />
+         </image>
+         <effect>
+            <Glow>
+               <input>
+                  <InnerShadow />
+               </input>
+            </Glow>
+         </effect></ImageView>
+      <Rectangle fx:id="settingOption" arcHeight="5.0" arcWidth="5.0" fill="#ebf4fc" height="35.0" layoutX="247.0" layoutY="183.0" stroke="#726f6f" strokeType="INSIDE" strokeWidth="3.0" width="107.0" />
+      <Rectangle fx:id="scoreboardOption" arcHeight="5.0" arcWidth="5.0" fill="#ebf4fc" height="35.0" layoutX="247.0" layoutY="223.0" stroke="#726f6f" strokeType="INSIDE" strokeWidth="3.0" width="107.0" />
+      <Rectangle fx:id="exitOption" arcHeight="5.0" arcWidth="5.0" fill="#ebf4fc" height="35.0" layoutX="247.0" layoutY="265.0" stroke="#726f6f" strokeType="INSIDE" strokeWidth="3.0" width="107.0" />
+      <Rectangle fx:id="playOption" arcHeight="5.0" arcWidth="5.0" fill="#ebf4fc" height="35.0" layoutX="247.0" layoutY="140.0" stroke="#706e6e" strokeType="INSIDE" strokeWidth="3.0" width="107.0" />
+      <Text fx:id="start" layoutX="283.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="START">
+         <font>
+            <Font name="Candara Italic" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="273.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SETTINGS">
+         <font>
+            <Font name="Candara Italic" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="262.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SCOREBOARD">
+         <font>
+            <Font name="Candara Italic" size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="287.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EXIT">
+         <font>
+            <Font name="Candara Italic" size="14.0" />
+         </font>
+      </Text>
+      <Button fx:id="startButton" layoutX="246.0" layoutY="135.0" mnemonicParsing="false" onAction="#startOptionClickedHandle" opacity="0.0" prefHeight="35.0" prefWidth="107.0" text="Button" textFill="WHITE" />
+      <Button fx:id="settingButton" layoutX="246.0" layoutY="183.0" mnemonicParsing="false" onAction="#settingOptionClickedHandle" opacity="0.0" prefHeight="35.0" prefWidth="107.0" text="Button" textFill="WHITE" />
+      <Button fx:id="scButton" layoutX="248.0" layoutY="223.0" mnemonicParsing="false" onAction="#scoreboardOptionClickedHandle" opacity="0.0" prefHeight="35.0" prefWidth="107.0" text="Button" textFill="WHITE" />
+      <Button fx:id="exitButton" layoutX="248.0" layoutY="266.0" mnemonicParsing="false" onAction="#exitOptionClickedHandle" opacity="0.0" prefHeight="35.0" prefWidth="107.0" text="Button" textFill="WHITE" />
+   </children>
+</AnchorPane>
