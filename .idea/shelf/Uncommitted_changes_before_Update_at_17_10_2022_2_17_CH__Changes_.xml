@@ -1,0 +1,14 @@
+<changelist name="Uncommitted_changes_before_Update_at_17_10_2022_2_17_CH_[Changes]" date="1665991062897" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_10_2022_2_17_CH_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 17/10/2022 2:17 CH [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/uet/oop/bomberman/entities/Bomb.class" />
+    <option name="AFTER_PATH" value="target/classes/uet/oop/bomberman/entities/Bomb.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_10_2022_2_17_CH_[Changes]/Bomb.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/uet/oop/bomberman/entities/Entity.class" />
+    <option name="AFTER_PATH" value="target/classes/uet/oop/bomberman/entities/Entity.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_10_2022_2_17_CH_[Changes]/Entity.class" />
+  </binary>
+</changelist>
